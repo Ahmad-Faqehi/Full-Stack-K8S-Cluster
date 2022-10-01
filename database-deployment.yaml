@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: centos/mysql-57-centos7
+        ports:
+        - containerPort: 3306
+        env:
+          - name: "MYSQL_DATABASE"
+            value: "ahmad_blog_api"
+          - name: "MYSQL_USER"
+            value: "ahmad"
+          - name: "MYSQL_ROOT_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: root-password
+
+          - name: "MYSQL_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: password
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath:  /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: db-pv-claim
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  password: U29IYXJkUEBhc3MwcmQ=
+  root-password: U29IYXJkUEBhc3MwcmQ=
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: database        
+  name: database-svc
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: database
