@@ -35,26 +35,29 @@ spec:
               secretKeyRef:
                 name: db-secret
                 key: password
+
+                
         volumeMounts:
-          - name: mysql-persistent-storage
+          - name: somtheingnew
             mountPath:  /var/lib/mysql
+
       volumes:
-        - name: mysql-persistent-storage
+        - name: somtheingnew
           persistentVolumeClaim:
-            claimName: db-pv-claim
+            claimName: db-mysql-pvc
 
 
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
+  name: db-mysql-pv
   labels:
     type: local
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -64,7 +67,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-pv-claim
+  name: db-mysql-pvc
 spec:
   storageClassName: manual
   accessModes:
