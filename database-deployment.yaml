@@ -16,9 +16,11 @@ spec:
     spec:
       containers:
       - name: database
-        image: mysql:8.0
+        image: mysql:5.7
         ports:
         - containerPort: 3306
+        command: ["curl"]
+        args: ["https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql", "-o","docker-entrypoint-initdb.d"]
         env:
           - name: "MYSQL_DATABASE"
             value: "ahmad_blog_api"
@@ -39,7 +41,7 @@ spec:
                 
         volumeMounts:
           - name: somtheingnew
-            mountPath:  /var/lib/mysql
+            mountPath: "/var/lib/mysql"
 
       volumes:
         - name: somtheingnew
