@@ -38,10 +38,10 @@ spec:
                 name: db-secret
                 key: password
 
-        initContainers:
-        - name: init-myservice
-          image: busybox:1.28
-          command: ['sh', 'curl', "https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
+      initContainers:
+      - name: init-myservice
+        image: busybox:1.28
+        command: ['sh', 'curl', "https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
                   
         volumeMounts:
           - name: somtheingnew
