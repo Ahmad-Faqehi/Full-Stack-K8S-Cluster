@@ -20,7 +20,7 @@ spec:
         ports:
         - containerPort: 3306
         command: ["curl"]
-        args: ["https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql", "-o","docker-entrypoint-initdb.d"]
+        args: ["https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql", "-o","docker-entrypoint-initdb.d/init.sql"]
         env:
           - name: "MYSQL_DATABASE"
             value: "ahmad_blog_api"
