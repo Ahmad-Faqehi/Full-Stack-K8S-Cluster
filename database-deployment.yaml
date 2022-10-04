@@ -20,7 +20,11 @@ spec:
         image: mysql:5.7
         ports:
         - containerPort: 3306
-        command: ["sh", "-c","curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql >> /docker-entrypoint-initdb.d/init.sql"]
+        volumeMounts:
+          - name: init-data
+            mountPath: /docker-entrypoint-initdb.d
+          - name: somtheingnew
+            mountPath: /var/lib/mysql
         env:
           - name: "MYSQL_DATABASE"
             value: "ahmad_blog_api"
@@ -38,22 +42,21 @@ spec:
                 name: db-secret
                 key: password
 
-      # initContainers:
-      # - name: init-myservice
-      #   image: ahmad75/testt:2.2
-      #   imagePullPolicy: IfNotPresent
-      #   command: ["sh", "-c","curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql"]
-      #   #command: ["sh", "-c","curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
-      #   #command: ["curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
-      #   #args: []
-      #   volumeMounts:
-      #     - name: somtheingnew
-      #       mountPath: "/var/lib/mysql"
+      initContainers:
+      - name: init-myservice
+        image: ahmad75/testt:2.2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: init-data
+            mountPath: /pod-data
+        command: ["sh", "-c"," sleep 2; curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql >> /pod-data/init.sql"]
 
       volumes:
         - name: somtheingnew
           persistentVolumeClaim:
             claimName: db-mysql-pvc
+        - name: init-data
+          emptyDir: {} 
 
 
 ---
@@ -71,7 +74,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/data"
+    path: /mnt/data
 
 ---
 apiVersion: v1
