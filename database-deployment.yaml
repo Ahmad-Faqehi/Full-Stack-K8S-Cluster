@@ -4,6 +4,7 @@ metadata:
   name: database
   labels:
     app: database
+  namespace: db
 spec:
   replicas: 1
   selector:
@@ -19,8 +20,8 @@ spec:
         image: mysql:5.7
         ports:
         - containerPort: 3306
-        command: ["curl"]
-        args: ["https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql", "-o","docker-entrypoint-initdb.d/init.sql"]
+        #command: ["curl"]
+        #args: ["https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql", "-o","docker-entrypoint-initdb.d/init.sql"]
         env:
           - name: "MYSQL_DATABASE"
             value: "ahmad_blog_api"
@@ -40,9 +41,12 @@ spec:
 
       initContainers:
       - name: init-myservice
-        image: busybox:1.28
-        command: ['sh', 'curl', "https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
-                  
+        image: ahmad75/testt:2.2
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "-c","curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql"]
+        #command: ["sh", "-c","curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
+        #command: ["curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql -o /tmp/init.sql"]
+        #args: []
         volumeMounts:
           - name: somtheingnew
             mountPath: "/var/lib/mysql"
@@ -58,6 +62,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: db-mysql-pv
+  namespace: db
   labels:
     type: local
 spec:
@@ -74,6 +79,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: db-mysql-pvc
+  namespace: db
 spec:
   storageClassName: manual
   accessModes:
@@ -87,6 +93,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: db-secret
+  namespace: db
 type: Opaque
 data:
   password: U29IYXJkUEBhc3MwcmQ=
@@ -99,6 +106,7 @@ metadata:
   labels:
     app: database        
   name: database-svc
+  namespace: db
 spec:
   ports:
   - port: 3306
