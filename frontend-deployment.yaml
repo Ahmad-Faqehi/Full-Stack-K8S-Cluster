@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: frontend
   labels:
-    app: api
+    app: frontend
   namespace: blog
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: frontend
   template:
     metadata:
       labels:
-        app: api
+        app: frontend
     spec:
       containers: 
-      - name: api
-        image: blog-api:1.5
+      - name: frontend
+        image: ahmad75/blog-vue
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -29,34 +29,25 @@ spec:
         ports:
         - containerPort: 8080
         env:
-          - name: "DB_HOST"
-            value: "database-svc"
-          - name: "DB_NAME"
-            value: "ahmad_blog_api"
-          - name: "DB_USER"
-            value: "ahmad"
-          - name: "DB_PASSWORD"
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: password
+          - name: "VUE_APP_BASE_API"
+            value: "http://api-svc:8080/api"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: api
-  name: api-svc
+    app: frontend
+  name: frontend-svc
   namespace: blog
 spec:
   ports:
   - port: 8080
     protocol: TCP
     targetPort: 8080
-    # nodePort: 30090
+    nodePort: 30070
   selector:
-    app: api
-  # type: NodePort
+    app: frontend
+  type: NodePort
 status:
   loadBalancer: {}

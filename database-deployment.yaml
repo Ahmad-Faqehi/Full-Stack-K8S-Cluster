@@ -6,7 +6,7 @@ metadata:
     app: database
   namespace: blog
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: database
@@ -56,7 +56,7 @@ spec:
         volumeMounts:
           - name: init-data
             mountPath: /pod-data
-        command: ["sh", "-c"," sleep 2; curl https://pastebin.com/raw/2My3y5py > /pod-data/init.sql"]
+        command: ["sh", "-c"," sleep 2; curl https://raw.githubusercontent.com/Ahmad-Faqehi/Full-Stack-K8S-Cluster/main/assets/data.sql > /pod-data/init.sql"]
 
       volumes:
         - name: mysql-data
