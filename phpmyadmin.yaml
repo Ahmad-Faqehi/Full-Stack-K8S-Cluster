@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: phpmyadmin-deployment
+  namespace: blog
 spec:
   replicas: 1
   selector:
@@ -16,7 +17,13 @@ spec:
       containers:
       - name: phpmyadmin
         image: phpmyadmin/phpmyadmin
-
+        resources:
+          requests:
+            memory: "120Mi"
+            cpu: "250m"
+          limits:
+            memory: "200Mi"
+            cpu: "500m"
         env:
             - name: PMA_HOST
               value: database-svc
@@ -37,6 +44,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: phpmyadmin-service
+  namespace: blog
 spec:
   selector:
     app: phpmyadmin

@@ -4,9 +4,9 @@ metadata:
   name: database
   labels:
     app: database
-  namespace: db
+  namespace: blog
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: database
@@ -15,15 +15,22 @@ spec:
       labels:
         app: database
     spec:
-      containers:
+      containers: 
       - name: database
         image: mysql:5.7
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "750m"
         ports:
         - containerPort: 3306
         volumeMounts:
           - name: init-data
             mountPath: /docker-entrypoint-initdb.d
-          - name: somtheingnew
+          - name: mysql-data
             mountPath: /var/lib/mysql
         env:
           - name: "MYSQL_DATABASE"
@@ -49,10 +56,10 @@ spec:
         volumeMounts:
           - name: init-data
             mountPath: /pod-data
-        command: ["sh", "-c"," sleep 2; curl https://raw.githubusercontent.com/Ahmad-Faqehi/Locker_System/main/db/lockers_v4.sql >> /pod-data/init.sql"]
+        command: ["sh", "-c"," sleep 2; curl https://pastebin.com/raw/2My3y5py > /pod-data/init.sql"]
 
       volumes:
-        - name: somtheingnew
+        - name: mysql-data
           persistentVolumeClaim:
             claimName: db-mysql-pvc
         - name: init-data
@@ -64,7 +71,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: db-mysql-pv
-  namespace: db
+  namespace: blog
   labels:
     type: local
 spec:
@@ -81,7 +88,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: db-mysql-pvc
-  namespace: db
+  namespace: blog
 spec:
   storageClassName: manual
   accessModes:
@@ -95,11 +102,11 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: db-secret
-  namespace: db
+  namespace: blog
 type: Opaque
 data:
   password: U29IYXJkUEBhc3MwcmQ=
-  root-password: U29IYXJkUEBhc3MwcmQ=
+  root-password: SHJhZGVyQDIzUGF3NzRwd2QK
 
 ---
 apiVersion: v1
@@ -108,7 +115,7 @@ metadata:
   labels:
     app: database        
   name: database-svc
-  namespace: db
+  namespace: blog
 spec:
   ports:
   - port: 3306
