@@ -17,7 +17,7 @@ spec:
     spec:
       containers: 
       - name: api
-        image: blog-api:1.5
+        image: ahmad75/blog-api
         imagePullPolicy: IfNotPresent
         resources:
           requests:

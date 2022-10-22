@@ -51,7 +51,7 @@ spec:
 
       initContainers:
       - name: init-myservice
-        image: ahmad75/testt:2.2
+        image: ahmad75/curl
         imagePullPolicy: IfNotPresent
         volumeMounts:
           - name: init-data
