@@ -30,7 +30,7 @@ spec:
         - containerPort: 8080
         env:
           - name: "VUE_APP_BASE_API"
-            value: "http://api-svc:8080/api"
+            value: "http://api-svc:30090/api"
 
 ---
 apiVersion: v1

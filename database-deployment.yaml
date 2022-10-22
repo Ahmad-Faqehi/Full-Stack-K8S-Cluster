@@ -44,10 +44,11 @@ spec:
                 key: root-password
 
           - name: "MYSQL_PASSWORD"
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: password
+            value: "128E818@XXVb"
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: db-secret
+            #     key: password
 
       initContainers:
       - name: init-myservice

@@ -54,9 +54,9 @@ spec:
   - port: 8080
     protocol: TCP
     targetPort: 8080
-    # nodePort: 30090
+    nodePort: 30090
   selector:
     app: api
-  # type: NodePort
+  type: NodePort
 status:
   loadBalancer: {}
