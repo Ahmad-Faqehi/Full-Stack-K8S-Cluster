@@ -105,8 +105,8 @@ metadata:
   namespace: blog
 type: Opaque
 data:
-  password: U29IYXJkUEBhc3MwcmQ=
-  root-password: SHJhZGVyQDIzUGF3NzRwd2QK
+  password: N0Bzc1B3c0BzeHd3
+  root-password: NTU1OEBNTWxvT1A=
 
 ---
 apiVersion: v1
