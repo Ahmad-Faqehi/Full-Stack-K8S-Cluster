@@ -30,7 +30,7 @@ spec:
         - containerPort: 8080
         env:
           - name: "VUE_APP_BASE_API"
-            value: "http://api-svc:30090/api"
+            value: "https://68c55196-a668-4b12-af04-3f03c3e42fb9-10-244-10-56-30090.spch.r.killercoda.com/api"
 
 ---
 apiVersion: v1
