@@ -20,11 +20,11 @@ spec:
         image: mysql:5.7
         resources:
           requests:
-            memory: "200Mi"
-            cpu: "150m"
-          limits:
-            memory: "200Mi"
+            memory: "250Mi"
             cpu: "250m"
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
         ports:
         - containerPort: 3306
         volumeMounts:
